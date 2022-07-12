@@ -100,6 +100,10 @@ def send(recipients=None, sender=None, template=None, context=None, subject='',
          priority=None, attachments=None, render_on_delivery=False,
          log_level=None, commit=True, cc=None, bcc=None, language='',
          backend=''):
+    email_template = get_email_template(...)
+    if not email_template.status.is_active:
+        return
+
     try:
         recipients = parse_emails(recipients)
     except ValidationError as e:
@@ -170,6 +174,10 @@ def send_many(kwargs_list):
     Internally, it uses Django's bulk_create command for efficiency reasons.
     Currently send_many() can't be used to send emails with priority = 'now'.
     """
+    for kwargs in kwargs_list:
+        if not get_email_template(kwargs.get("template")).status.is_active:
+            kwargs_list.remove(kwargs)
+
     emails = [send(commit=False, **kwargs) for kwargs in kwargs_list]
     if emails:
         Email.objects.bulk_create(emails)

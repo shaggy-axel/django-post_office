@@ -307,6 +307,14 @@ def get_upload_path(instance, filename):
                         str(date.month), str(date.day), filename)
 
 
+class EmailTemplateStatus(models.Model):
+    is_active = models.BooleanField(defualt=True)
+    email_template = models.OneToOneField(EmailTemplate, on_delete=models.CASCADE, related_name='status')
+
+    def __str__(self):
+        return str(self.email_template)
+
+
 class Attachment(models.Model):
     """
     A model describing an email attachment.
