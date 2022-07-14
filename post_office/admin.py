@@ -264,7 +264,7 @@ class EmailTemplateInline(admin.StackedInline):
     formset = EmailTemplateAdminFormSet
     model = EmailTemplate
     extra = 0
-    fields = ('language', 'subject', 'content', 'html_content',)
+    fields = ('language', 'subject', 'content', 'html_content', 'is_active')
     formfield_overrides = {
         models.CharField: {'widget': SubjectField}
     }
@@ -279,7 +279,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description', 'subject')
     fieldsets = [
         (None, {
-            'fields': ('name', 'description'),
+            'fields': ('name', 'description', 'is_active'),
         }),
         (_("Default Content"), {
             'fields': ('subject', 'content', 'html_content'),
